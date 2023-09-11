@@ -1,0 +1,77 @@
+a)
+line console 0
+pass 08092023console
+login
+!
+b)
+enable pass 08092023enable
+!
+enable sec classenable
+C)
+hostname nguyenhoan_20062741
+!
+username hoanhk2 pass Tel@ssh
+!
+ip domain-mane nguyehoan.net
+!
+crypto key generate rsa general-keys modulus 1024
+!
+line vty 0 4
+ login local
+ tran input all
+ pass Tel@ssh
+!
+login block-for 2 attempts 2 within 2
+!
+login quiet-mode access-class 2
+access-list 2 permit any
+
+2
+
+West
+int e0/0
+ ip add 192.168.0.1 255.255.255.0
+ no shut
+!
+int s1/0
+ ip add 10.0.0.1 255.255.255.0
+ no shut
+!
+ip route 192.168.1.0 255.255.255.0 10.0.0.2 name vpc2
+ip route 192.168.2.0 255.255.255.0 10.0.0.2 name vpc3
+
+Central
+int e0/0
+ ip add 192.168.1.1 255.255.255.0
+ no shut
+!
+int s1/0
+ ip add 10.0.0.2 255.255.255.0
+ no shut
+!
+int s1/1
+ ip add 10.0.1.1 255.255.255.0
+ no shut
+!
+ip route 192.168.0.0 255.255.255.0 10.0.0.1 name vpc1
+ip route 192.168.2.0 255.255.255.0 10.0.1.2 name vpc2
+
+EAST
+int e0/0
+ ip add 192.168.2.1 255.255.255.0
+ no shut
+!
+int s1/0
+ ip add 10.0.1.2 255.255.255.0
+ no shut
+!
+ip route 192.168.0.0 255.255.255.0 10.0.1.1 name vpc1
+ip route 192.168.1.0 255.255.255.0 10.0.1.1 name vpc2
+
+vpc1
+ip 192.168.0.5/24 192.168.0.1
+vpc2
+ip 192.168.1.5/24 192.168.1.1
+vpc3
+ip 192.168.2.5/24 192.168.2.1
+
